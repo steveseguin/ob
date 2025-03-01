@@ -1,4 +1,4 @@
-# JavaScript Obfuscator Tool
+# Transcodify - JavaScript Obfuscator Tool
 
 A powerful browser-based JavaScript code obfuscation tool that helps protect your JavaScript source code by transforming it into a form that's difficult to understand, reverse-engineer, or tamper with.
 
