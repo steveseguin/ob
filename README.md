@@ -4,7 +4,7 @@ A powerful browser-based JavaScript code obfuscation tool that helps protect you
 
 [Try online here](https://transcodify.com/)
 
-![image](https://github.com/user-attachments/assets/edb6feac-224f-472c-bc0e-0b84e524d970)
+![image](https://github.com/user-attachments/assets/a4118cf9-cc5f-4e8e-90ff-31f7477c5f37)
 
 ## Features
 
