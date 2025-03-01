@@ -651,7 +651,7 @@
     <div id="notification" class="notification"></div>
 
     <script>
-        const inputCode = document.getElementById('inputCode');
+ const inputCode = document.getElementById('inputCode');
  const outputCode = document.getElementById('outputCode');
  const obfuscateBtn = document.getElementById('obfuscateBtn');
  const copyBtn = document.getElementById('copyBtn');
@@ -883,42 +883,47 @@ console.log("Constants:", calcResults.constants);
  	}
  };
 
- function initUI() {
- 	updateLineNumbers(inputCode, inputLineNumbers);
- 	updateCodeStats(inputCode, inputStats);
- 	applyPreset('default');
- 	document.addEventListener('click', function(e) {
- 		if (e.target === moreBtn || moreBtn.contains(e.target)) {
- 			moreMenu.classList.toggle('show');
- 		} else {
- 			moreMenu.classList.remove('show');
- 		}
- 	});
- }
+function initUI() {
+    updateLineNumbers(inputCode, inputLineNumbers);
+    updateCodeStats(inputCode, inputStats);
+    
+    // Load saved settings or apply default preset
+    loadSettingsFromLocalStorage();
+    setupSettingsSaving();
+    
+    document.addEventListener('click', function(e) {
+        if (e.target === moreBtn || moreBtn.contains(e.target)) {
+            moreMenu.classList.toggle('show');
+        } else {
+            moreMenu.classList.remove('show');
+        }
+    });
+}
 
  function toggleOptions() {
  	optionsPanel.classList.toggle('collapsed');
  	optionsPanel.classList.toggle('expanded');
  }
 
- function applyPreset(presetName) {
- 	if (presetName === 'custom') return;
- 	const preset = presets[presetName];
- 	for (const [key, element] of Object.entries(optionElements)) {
- 		if (key in preset) {
- 			if (element.type === 'checkbox') {
- 				element.checked = preset[key];
- 			} else if (element.type === 'range' || element.type === 'number' || element.type === 'text') {
- 				element.value = preset[key];
- 			} else if (element.tagName === 'SELECT') {
- 				element.value = preset[key];
- 			}
- 		}
- 	}
- 	document.getElementById('defaultFilename').value = preset.defaultFilename;
- 	optionElements.encodeBase64.checked = preset.stringArrayEncoding.includes('base64');
- 	optionElements.encodeRC4.checked = preset.stringArrayEncoding.includes('rc4');
- }
+function applyPreset(presetName) {
+    if (presetName === 'custom') return;
+    const preset = presets[presetName];
+    for (const [key, element] of Object.entries(optionElements)) {
+        if (key in preset) {
+            if (element.type === 'checkbox') {
+                element.checked = preset[key];
+            } else if (element.type === 'range' || element.type === 'number' || element.type === 'text') {
+                element.value = preset[key];
+            } else if (element.tagName === 'SELECT') {
+                element.value = preset[key];
+            }
+        }
+    }
+    document.getElementById('defaultFilename').value = preset.defaultFilename;
+    optionElements.encodeBase64.checked = preset.stringArrayEncoding.includes('base64');
+    optionElements.encodeRC4.checked = preset.stringArrayEncoding.includes('rc4');
+    saveSettingsToLocalStorage();
+}
 
  function getOptions() {
  	const options = {};
@@ -965,6 +970,17 @@ console.log("Constants:", calcResults.constants);
  	}
  }
 
+function setupSettingsSaving() {
+    for (const element of Object.values(optionElements)) {
+        element.addEventListener('change', saveSettingsToLocalStorage);
+    }
+    
+    presetSelect.addEventListener('change', (e) => {
+        applyPreset(e.target.value);
+        saveSettingsToLocalStorage();
+    });
+}
+
  function showNotification(message, type = 'success') {
  	notification.textContent = message;
  	notification.className = `notification ${type} show`;
@@ -974,28 +990,29 @@ console.log("Constants:", calcResults.constants);
  }
 
  function obfuscateCode() {
- 	const code = inputCode.value.trim();
- 	if (!code) {
- 		showNotification('Please enter some JavaScript code', 'error');
- 		return;
- 	}
- 	obfuscateBtn.classList.add('loading');
- 	try {
- 		const options = getOptions();
- 		const obfuscationResult = JavaScriptObfuscator.obfuscate(code, options);
- 		outputCode.value = obfuscationResult.getObfuscatedCode();
- 		updateLineNumbers(outputCode, outputLineNumbers);
- 		updateCodeStats(outputCode, outputStats);
- 		obfuscateBtn.classList.remove('loading');
- 		showNotification('Code obfuscated successfully');
- 	} catch (error) {
- 		obfuscateBtn.classList.remove('loading');
- 		console.error(error);
- 		showNotification(`Error: ${error.message}`, 'error');
- 	}
- }
+    const code = inputCode.value.trim();
+    if (!code) {
+        showNotification('Please enter some JavaScript code', 'error');
+        return;
+    }
+    obfuscateBtn.classList.add('loading');
+    try {
+        const options = getOptions();
+        const obfuscationResult = JavaScriptObfuscator.obfuscate(code, options);
+        outputCode.value = obfuscationResult.getObfuscatedCode();
+        updateLineNumbers(outputCode, outputLineNumbers);
+        updateCodeStats(outputCode, outputStats);
+        obfuscateBtn.classList.remove('loading');
+        showNotification('Code obfuscated successfully');
+        saveSettingsToLocalStorage();
+    } catch (error) {
+        obfuscateBtn.classList.remove('loading');
+        console.error(error);
+        showNotification(`Error: ${error.message}`, 'error');
+    }
+}
 
- function copyToClipboard() {
+function copyToClipboard() {
  	outputCode.select();
  	document.execCommand('copy');
  	showNotification('Copied to clipboard');
@@ -1087,6 +1104,25 @@ console.log("Constants:", calcResults.constants);
  		showNotification(`Error minifying code: ${error.message}`, 'error');
  	}
  }
+
+function saveSettingsToLocalStorage() {
+    const options = getOptions();
+    localStorage.setItem('transcodifySettings', JSON.stringify(options));
+    localStorage.setItem('transcodifyPreset', presetSelect.value);
+}
+
+function loadSettingsFromLocalStorage() {
+    const savedSettings = localStorage.getItem('transcodifySettings');
+    const savedPreset = localStorage.getItem('transcodifyPreset');
+    
+    if (savedSettings) {
+        loadConfig(savedSettings);
+    }
+    
+    if (savedPreset) {
+        presetSelect.value = savedPreset;
+    }
+}
 
  function beautifyCode(inputElement = outputCode) {
  	const code = inputElement.value.trim();
