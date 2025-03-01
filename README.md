@@ -4,6 +4,8 @@ A powerful browser-based JavaScript code obfuscation tool that helps protect you
 
 [Try online here](https://transcodify.com/)
 
+![image](https://github.com/user-attachments/assets/edb6feac-224f-472c-bc0e-0b84e524d970)
+
 ## Features
 
 - **Client-side obfuscation** - All processing happens in your browser; no code is sent to any server
