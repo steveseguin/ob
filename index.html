@@ -650,38 +650,35 @@
     <div id="notification" class="notification"></div>
 
     <script>
-        // DOM Elements
         const inputCode = document.getElementById('inputCode');
-        const outputCode = document.getElementById('outputCode');
-        const obfuscateBtn = document.getElementById('obfuscateBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const clearInputBtn = document.getElementById('clearInputBtn');
-        const presetSelect = document.getElementById('preset');
-        const toggleOptionsBtn = document.getElementById('toggleOptions');
-        const optionsPanel = document.getElementById('optionsPanel');
-        const optionsHeader = document.getElementById('optionsHeader');
-        const inputLineNumbers = document.getElementById('inputLineNumbers');
-        const outputLineNumbers = document.getElementById('outputLineNumbers');
-        const inputStats = document.getElementById('inputStats');
-        const outputStats = document.getElementById('outputStats');
-        const sizeComparison = document.getElementById('sizeComparison');
-        const compressionRatio = document.getElementById('compressionRatio');
-        const notification = document.getElementById('notification');
-        const moreBtn = document.getElementById('moreBtn');
-        const moreMenu = document.getElementById('moreMenu');
-        const sampleCodeBtn = document.getElementById('sampleCodeBtn');
-        const minifyBtn = document.getElementById('minifyBtn');
-        const beautifyBtn = document.getElementById('beautifyBtn');
-        const prettifyBtn = document.getElementById('prettifyBtn');
-        const loadFileBtn = document.getElementById('loadFileBtn');
-        const fileInput = document.getElementById('fileInput');
-        const saveConfigBtn = document.getElementById('saveConfigBtn');
-        const loadConfigBtn = document.getElementById('loadConfigBtn');
-        const configInput = document.getElementById('configInput');
-
-        // Sample code
-        const sampleCode = `// Object with methods and properties
+ const outputCode = document.getElementById('outputCode');
+ const obfuscateBtn = document.getElementById('obfuscateBtn');
+ const copyBtn = document.getElementById('copyBtn');
+ const downloadBtn = document.getElementById('downloadBtn');
+ const clearInputBtn = document.getElementById('clearInputBtn');
+ const presetSelect = document.getElementById('preset');
+ const toggleOptionsBtn = document.getElementById('toggleOptions');
+ const optionsPanel = document.getElementById('optionsPanel');
+ const optionsHeader = document.getElementById('optionsHeader');
+ const inputLineNumbers = document.getElementById('inputLineNumbers');
+ const outputLineNumbers = document.getElementById('outputLineNumbers');
+ const inputStats = document.getElementById('inputStats');
+ const outputStats = document.getElementById('outputStats');
+ const sizeComparison = document.getElementById('sizeComparison');
+ const compressionRatio = document.getElementById('compressionRatio');
+ const notification = document.getElementById('notification');
+ const moreBtn = document.getElementById('moreBtn');
+ const moreMenu = document.getElementById('moreMenu');
+ const sampleCodeBtn = document.getElementById('sampleCodeBtn');
+ const minifyBtn = document.getElementById('minifyBtn');
+ const beautifyBtn = document.getElementById('beautifyBtn');
+ const prettifyBtn = document.getElementById('prettifyBtn');
+ const loadFileBtn = document.getElementById('loadFileBtn');
+ const fileInput = document.getElementById('fileInput');
+ const saveConfigBtn = document.getElementById('saveConfigBtn');
+ const loadConfigBtn = document.getElementById('loadConfigBtn');
+ const configInput = document.getElementById('configInput');
+ const sampleCode = `
 const calculator = {
     add: function(a, b) {
         return a + b;
@@ -704,8 +701,6 @@ const calculator = {
     pi: 3.14159,
     e: 2.71828
 };
-
-// Function that uses the calculator
 function performCalculations() {
     const results = [];
     results.push(calculator.add(10, 5));
@@ -713,15 +708,11 @@ function performCalculations() {
     results.push(calculator.multiply(10, 5));
     results.push(calculator.divide(10, 5));
     results.push(calculator.power(10, 2));
-    
-    // String operations
     const message = "Calculation results:";
-    
     console.log(message);
     for (let i = 0; i < results.length; i++) {
         console.log(\`Result \${i + 1}: \${results[i]}\`);
     }
-    
     return {
         results: results,
         constants: {
@@ -730,589 +721,489 @@ function performCalculations() {
         }
     };
 }
-
-// Call the function
 const calcResults = performCalculations();
 console.log("Constants:", calcResults.constants);
 `;
+ const optionElements = {
+ 	compact: document.getElementById('compact'),
+ 	controlFlowFlattening: document.getElementById('controlFlowFlattening'),
+ 	controlFlowFlatteningThreshold: document.getElementById('controlFlowFlatteningThreshold'),
+ 	deadCodeInjection: document.getElementById('deadCodeInjection'),
+ 	deadCodeInjectionThreshold: document.getElementById('deadCodeInjectionThreshold'),
+ 	debugProtection: document.getElementById('debugProtection'),
+ 	disableConsoleOutput: document.getElementById('disableConsoleOutput'),
+ 	identifierNamesGenerator: document.getElementById('identifierNamesGenerator'),
+ 	identifiersPrefix: document.getElementById('identifiersPrefix'),
+ 	numbersToExpressions: document.getElementById('numbersToExpressions'),
+ 	renameGlobals: document.getElementById('renameGlobals'),
+ 	selfDefending: document.getElementById('selfDefending'),
+ 	simplify: document.getElementById('simplify'),
+ 	splitStrings: document.getElementById('splitStrings'),
+ 	splitStringsChunkLength: document.getElementById('splitStringsChunkLength'),
+ 	stringArray: document.getElementById('stringArray'),
+ 	stringArrayCallsTransform: document.getElementById('stringArrayCallsTransform'),
+ 	stringArrayCallsTransformThreshold: document.getElementById('stringArrayCallsTransformThreshold'),
+ 	stringArrayThreshold: document.getElementById('stringArrayThreshold'),
+ 	stringArrayRotate: document.getElementById('stringArrayRotate'),
+ 	stringArrayShuffle: document.getElementById('stringArrayShuffle'),
+ 	stringArrayIndexShift: document.getElementById('stringArrayIndexShift'),
+ 	stringArrayWrappersCount: document.getElementById('stringArrayWrappersCount'),
+ 	stringArrayWrappersType: document.getElementById('stringArrayWrappersType'),
+ 	stringArrayWrappersChainedCalls: document.getElementById('stringArrayWrappersChainedCalls'),
+ 	target: document.getElementById('target'),
+ 	transformObjectKeys: document.getElementById('transformObjectKeys'),
+ 	unicodeEscapeSequence: document.getElementById('unicodeEscapeSequence'),
+ 	encodeBase64: document.getElementById('encodeBase64'),
+ 	encodeRC4: document.getElementById('encodeRC4'),
+ 	defaultFilename: document.getElementById('defaultFilename'),
+ };
+ const presets = {
+ 	default: {
+ 		compact: true,
+ 		controlFlowFlattening: false,
+ 		deadCodeInjection: false,
+ 		debugProtection: false,
+ 		disableConsoleOutput: false,
+ 		identifierNamesGenerator: 'hexadecimal',
+ 		identifiersPrefix: '',
+ 		numbersToExpressions: false,
+ 		renameGlobals: false,
+ 		selfDefending: false,
+ 		simplify: true,
+ 		splitStrings: false,
+ 		stringArray: true,
+ 		stringArrayCallsTransform: false,
+ 		stringArrayCallsTransformThreshold: 0.5,
+ 		stringArrayIndexShift: true,
+ 		stringArrayRotate: true,
+ 		stringArrayShuffle: true,
+ 		stringArrayThreshold: 0.75,
+ 		stringArrayWrappersCount: 1,
+ 		stringArrayWrappersType: 'variable',
+ 		stringArrayWrappersChainedCalls: true,
+ 		target: 'browser',
+ 		transformObjectKeys: false,
+ 		unicodeEscapeSequence: false,
+ 		stringArrayEncoding: [],
+ 		defaultFilename: 'obfuscated.js',
+ 	},
+ 	low: {
+ 		compact: true,
+ 		controlFlowFlattening: false,
+ 		deadCodeInjection: false,
+ 		debugProtection: false,
+ 		disableConsoleOutput: true,
+ 		identifierNamesGenerator: 'hexadecimal',
+ 		identifiersPrefix: '',
+ 		numbersToExpressions: false,
+ 		renameGlobals: false,
+ 		selfDefending: true,
+ 		simplify: true,
+ 		splitStrings: false,
+ 		stringArray: true,
+ 		stringArrayCallsTransform: false,
+ 		stringArrayCallsTransformThreshold: 0.5,
+ 		stringArrayIndexShift: true,
+ 		stringArrayRotate: true,
+ 		stringArrayShuffle: true,
+ 		stringArrayThreshold: 0.75,
+ 		stringArrayWrappersCount: 1,
+ 		stringArrayWrappersType: 'variable',
+ 		stringArrayWrappersChainedCalls: true,
+ 		target: 'browser',
+ 		transformObjectKeys: false,
+ 		unicodeEscapeSequence: false,
+ 		stringArrayEncoding: [],
+ 		defaultFilename: 'obfuscated.js',
+ 	},
+ 	medium: {
+ 		compact: true,
+ 		controlFlowFlattening: true,
+ 		controlFlowFlatteningThreshold: 0.75,
+ 		deadCodeInjection: true,
+ 		deadCodeInjectionThreshold: 0.4,
+ 		debugProtection: false,
+ 		disableConsoleOutput: true,
+ 		identifierNamesGenerator: 'hexadecimal',
+ 		identifiersPrefix: '',
+ 		numbersToExpressions: true,
+ 		renameGlobals: false,
+ 		selfDefending: true,
+ 		simplify: true,
+ 		splitStrings: true,
+ 		splitStringsChunkLength: 10,
+ 		stringArray: true,
+ 		stringArrayCallsTransform: true,
+ 		stringArrayCallsTransformThreshold: 0.75,
+ 		stringArrayIndexShift: true,
+ 		stringArrayRotate: true,
+ 		stringArrayShuffle: true,
+ 		stringArrayThreshold: 0.75,
+ 		stringArrayWrappersCount: 2,
+ 		stringArrayWrappersType: 'function',
+ 		stringArrayWrappersChainedCalls: true,
+ 		target: 'browser',
+ 		transformObjectKeys: true,
+ 		unicodeEscapeSequence: false,
+ 		stringArrayEncoding: ['base64'],
+ 		defaultFilename: 'obfuscated.js',
+ 	},
+ 	high: {
+ 		compact: true,
+ 		controlFlowFlattening: true,
+ 		controlFlowFlatteningThreshold: 1,
+ 		deadCodeInjection: true,
+ 		deadCodeInjectionThreshold: 1,
+ 		debugProtection: true,
+ 		disableConsoleOutput: true,
+ 		identifierNamesGenerator: 'hexadecimal',
+ 		identifiersPrefix: '',
+ 		numbersToExpressions: true,
+ 		renameGlobals: false,
+ 		selfDefending: true,
+ 		simplify: true,
+ 		splitStrings: true,
+ 		splitStringsChunkLength: 5,
+ 		stringArray: true,
+ 		stringArrayCallsTransform: true,
+ 		stringArrayCallsTransformThreshold: 1,
+ 		stringArrayIndexShift: true,
+ 		stringArrayRotate: true,
+ 		stringArrayShuffle: true,
+ 		stringArrayThreshold: 1,
+ 		stringArrayWrappersCount: 5,
+ 		stringArrayWrappersType: 'function',
+ 		stringArrayWrappersChainedCalls: true,
+ 		target: 'browser',
+ 		transformObjectKeys: true,
+ 		unicodeEscapeSequence: false,
+ 		stringArrayEncoding: ['rc4'],
+ 		defaultFilename: 'obfuscated.js',
+ 	}
+ };
 
-        // Option elements
-        const optionElements = {
-            compact: document.getElementById('compact'),
-            controlFlowFlattening: document.getElementById('controlFlowFlattening'),
-            controlFlowFlatteningThreshold: document.getElementById('controlFlowFlatteningThreshold'),
-            deadCodeInjection: document.getElementById('deadCodeInjection'),
-            deadCodeInjectionThreshold: document.getElementById('deadCodeInjectionThreshold'),
-            debugProtection: document.getElementById('debugProtection'),
-            disableConsoleOutput: document.getElementById('disableConsoleOutput'),
-            identifierNamesGenerator: document.getElementById('identifierNamesGenerator'),
-            identifiersPrefix: document.getElementById('identifiersPrefix'),
-            numbersToExpressions: document.getElementById('numbersToExpressions'),
-            renameGlobals: document.getElementById('renameGlobals'),
-            selfDefending: document.getElementById('selfDefending'),
-            simplify: document.getElementById('simplify'),
-            splitStrings: document.getElementById('splitStrings'),
-            splitStringsChunkLength: document.getElementById('splitStringsChunkLength'),
-            stringArray: document.getElementById('stringArray'),
-            stringArrayCallsTransform: document.getElementById('stringArrayCallsTransform'),
-            stringArrayCallsTransformThreshold: document.getElementById('stringArrayCallsTransformThreshold'),
-            stringArrayThreshold: document.getElementById('stringArrayThreshold'),
-            stringArrayRotate: document.getElementById('stringArrayRotate'),
-            stringArrayShuffle: document.getElementById('stringArrayShuffle'),
-            stringArrayIndexShift: document.getElementById('stringArrayIndexShift'),
-            stringArrayWrappersCount: document.getElementById('stringArrayWrappersCount'),
-            stringArrayWrappersType: document.getElementById('stringArrayWrappersType'),
-            stringArrayWrappersChainedCalls: document.getElementById('stringArrayWrappersChainedCalls'),
-            target: document.getElementById('target'),
-            transformObjectKeys: document.getElementById('transformObjectKeys'),
-            unicodeEscapeSequence: document.getElementById('unicodeEscapeSequence'),
-            encodeBase64: document.getElementById('encodeBase64'),
-            encodeRC4: document.getElementById('encodeRC4'),
-        };
+ function initUI() {
+ 	updateLineNumbers(inputCode, inputLineNumbers);
+ 	updateCodeStats(inputCode, inputStats);
+ 	applyPreset('default');
+ 	document.addEventListener('click', function(e) {
+ 		if (e.target === moreBtn || moreBtn.contains(e.target)) {
+ 			moreMenu.classList.toggle('show');
+ 		} else {
+ 			moreMenu.classList.remove('show');
+ 		}
+ 	});
+ }
 
-        // Presets
-        const presets = {
-            default: {
-                compact: true,
-                controlFlowFlattening: false,
-                deadCodeInjection: false,
-                debugProtection: false,
-                disableConsoleOutput: false,
-                identifierNamesGenerator: 'hexadecimal',
-                identifiersPrefix: '',
-                numbersToExpressions: false,
-                renameGlobals: false,
-                selfDefending: false,
-                simplify: true,
-                splitStrings: false,
-                stringArray: true,
-                stringArrayCallsTransform: false,
-                stringArrayCallsTransformThreshold: 0.5,
-                stringArrayIndexShift: true,
-                stringArrayRotate: true,
-                stringArrayShuffle: true,
-                stringArrayThreshold: 0.75,
-                stringArrayWrappersCount: 1,
-                stringArrayWrappersType: 'variable',
-                stringArrayWrappersChainedCalls: true,
-                target: 'browser',
-                transformObjectKeys: false,
-                unicodeEscapeSequence: false,
-                stringArrayEncoding: [],
-				defaultFilename: 'obfuscated.js',
-            },
-            low: {
-                compact: true,
-                controlFlowFlattening: false,
-                deadCodeInjection: false,
-                debugProtection: false,
-                disableConsoleOutput: true,
-                identifierNamesGenerator: 'hexadecimal',
-                identifiersPrefix: '',
-                numbersToExpressions: false,
-                renameGlobals: false,
-                selfDefending: true,
-                simplify: true,
-                splitStrings: false,
-                stringArray: true,
-                stringArrayCallsTransform: false,
-                stringArrayCallsTransformThreshold: 0.5,
-                stringArrayIndexShift: true,
-                stringArrayRotate: true,
-                stringArrayShuffle: true,
-                stringArrayThreshold: 0.75,
-                stringArrayWrappersCount: 1,
-                stringArrayWrappersType: 'variable',
-                stringArrayWrappersChainedCalls: true,
-                target: 'browser',
-                transformObjectKeys: false,
-                unicodeEscapeSequence: false,
-                stringArrayEncoding: [],
-				defaultFilename: 'obfuscated.js',
-            },
-            medium: {
-				compact: true,
-				controlFlowFlattening: true,
-				controlFlowFlatteningThreshold: 0.75,
-				deadCodeInjection: true,
-				deadCodeInjectionThreshold: 0.4,
-				debugProtection: false,
-				disableConsoleOutput: true,
-				identifierNamesGenerator: 'hexadecimal',
-				identifiersPrefix: '',
-				numbersToExpressions: true,
-				renameGlobals: false,
-				selfDefending: true,
-				simplify: true,
-				splitStrings: true,
-				splitStringsChunkLength: 10,
-				stringArray: true,
-				stringArrayCallsTransform: true,
-				stringArrayCallsTransformThreshold: 0.75,
-				stringArrayIndexShift: true,
-				stringArrayRotate: true,
-				stringArrayShuffle: true,
-				stringArrayThreshold: 0.75,
-				stringArrayWrappersCount: 2,
-				stringArrayWrappersType: 'function',
-				stringArrayWrappersChainedCalls: true,
-				target: 'browser',
-				transformObjectKeys: true,
-				unicodeEscapeSequence: false,
-				stringArrayEncoding: ['base64'],
-				defaultFilename: 'obfuscated.js',
-			},
-            high: {
-				compact: true,
-				controlFlowFlattening: true,
-				controlFlowFlatteningThreshold: 1,
-				deadCodeInjection: true,
-				deadCodeInjectionThreshold: 1,
-				debugProtection: true,
-				disableConsoleOutput: true,
-				identifierNamesGenerator: 'hexadecimal',
-				identifiersPrefix: '',
-				numbersToExpressions: true,
-				renameGlobals: false,
-				selfDefending: true,
-				simplify: true,
-				splitStrings: true,
-				splitStringsChunkLength: 5,
-				stringArray: true,
-				stringArrayCallsTransform: true,
-				stringArrayCallsTransformThreshold: 1,
-				stringArrayIndexShift: true,
-				stringArrayRotate: true,
-				stringArrayShuffle: true,
-				stringArrayThreshold: 1,
-				stringArrayWrappersCount: 5,
-				stringArrayWrappersType: 'function',
-				stringArrayWrappersChainedCalls: true,
-				target: 'browser',
-				transformObjectKeys: true,
-				unicodeEscapeSequence: false,
-				stringArrayEncoding: ['rc4'],
-				defaultFilename: 'obfuscated.js',
-			}
-		};
-		
-	// Initialize UI state
-        function initUI() {
-            updateLineNumbers(inputCode, inputLineNumbers);
-            updateCodeStats(inputCode, inputStats);
-            
-            // Apply default preset
-            applyPreset('default');
-            
-            // Show the dropdown menu when clicking the more button
-            document.addEventListener('click', function(e) {
-                if (e.target === moreBtn || moreBtn.contains(e.target)) {
-                    moreMenu.classList.toggle('show');
-                } else {
-                    moreMenu.classList.remove('show');
-                }
-            });
-        }
+ function toggleOptions() {
+ 	optionsPanel.classList.toggle('collapsed');
+ 	optionsPanel.classList.toggle('expanded');
+ }
 
-        // Function to toggle options panel
-        function toggleOptions() {
-            optionsPanel.classList.toggle('collapsed');
-            optionsPanel.classList.toggle('expanded');
-        }
+ function applyPreset(presetName) {
+ 	if (presetName === 'custom') return;
+ 	const preset = presets[presetName];
+ 	for (const [key, element] of Object.entries(optionElements)) {
+ 		if (key in preset) {
+ 			if (element.type === 'checkbox') {
+ 				element.checked = preset[key];
+ 			} else if (element.type === 'range' || element.type === 'number' || element.type === 'text') {
+ 				element.value = preset[key];
+ 			} else if (element.tagName === 'SELECT') {
+ 				element.value = preset[key];
+ 			}
+ 		}
+ 	}
+ 	document.getElementById('defaultFilename').value = preset.defaultFilename;
+ 	optionElements.encodeBase64.checked = preset.stringArrayEncoding.includes('base64');
+ 	optionElements.encodeRC4.checked = preset.stringArrayEncoding.includes('rc4');
+ }
 
-        // Function to apply presets
-		function applyPreset(presetName) {
-			if (presetName === 'custom') return;
-			
-			const preset = presets[presetName];
-			
-			for (const [key, element] of Object.entries(optionElements)) {
-				if (key in preset) {
-					if (element.type === 'checkbox') {
-						element.checked = preset[key];
-					} else if (element.type === 'range' || element.type === 'number' || element.type === 'text') {
-						element.value = preset[key];
-					} else if (element.tagName === 'SELECT') {
-						element.value = preset[key];
-					}
-				}
-			}
-			
-			// Set the defaultFilename value
-			document.getElementById('defaultFilename').value = preset.defaultFilename;
-			
-			// Handle encoding options separately
-			optionElements.encodeBase64.checked = preset.stringArrayEncoding.includes('base64');
-			optionElements.encodeRC4.checked = preset.stringArrayEncoding.includes('rc4');
-		}
+ function getOptions() {
+ 	const options = {};
+ 	for (const [key, element] of Object.entries(optionElements)) {
+ 		if (element.type === 'checkbox') {
+ 			options[key] = element.checked;
+ 		} else if (element.type === 'range' || element.type === 'number') {
+ 			options[key] = parseFloat(element.value);
+ 		} else if (element.type === 'text') {
+ 			options[key] = element.value;
+ 		} else if (element.tagName === 'SELECT') {
+ 			options[key] = element.value;
+ 		}
+ 	}
+ 	options.defaultFilename = document.getElementById('defaultFilename')?.value || 'obfuscated.js';
+ 	const encodings = [];
+ 	if (optionElements.encodeBase64.checked) encodings.push('base64');
+ 	if (optionElements.encodeRC4.checked) encodings.push('rc4');
+ 	options.stringArrayEncoding = encodings;
+ 	return options;
+ }
 
-        // Function to get the current options from UI
-        function getOptions() {
-            const options = {};
-            
-            for (const [key, element] of Object.entries(optionElements)) {
-                if (element.type === 'checkbox') {
-                    options[key] = element.checked;
-                } else if (element.type === 'range' || element.type === 'number') {
-                    options[key] = parseFloat(element.value);
-                } else if (element.type === 'text') {
-                    options[key] = element.value;
-                } else if (element.tagName === 'SELECT') {
-                    options[key] = element.value;
-                }
-            }
-            options.defaultFilename = optionElements.defaultFilename.value;
-            // Build string array encoding array
-            const encodings = [];
-            if (optionElements.encodeBase64.checked) encodings.push('base64');
-            if (optionElements.encodeRC4.checked) encodings.push('rc4');
-            options.stringArrayEncoding = encodings;
-            
-            return options;
-        }
+ function updateLineNumbers(textArea, lineNumbersDiv) {
+ 	const lines = textArea.value.split('\n');
+ 	const lineCount = lines.length;
+ 	let lineNumbersHTML = '';
+ 	for (let i = 1; i <= lineCount; i++) {
+ 		lineNumbersHTML += i + '<br>';
+ 	}
+ 	lineNumbersDiv.innerHTML = lineNumbersHTML;
+ }
 
-        // Function to update line numbers
-        function updateLineNumbers(textArea, lineNumbersDiv) {
-            const lines = textArea.value.split('\n');
-            const lineCount = lines.length;
-            let lineNumbersHTML = '';
-            
-            for (let i = 1; i <= lineCount; i++) {
-                lineNumbersHTML += i + '<br>';
-            }
-            
-            lineNumbersDiv.innerHTML = lineNumbersHTML;
-        }
+ function updateCodeStats(textArea, statsDiv) {
+ 	const text = textArea.value;
+ 	const charCount = text.length;
+ 	const lineCount = text.split('\n').length;
+ 	statsDiv.innerHTML = `Characters: ${charCount} | Lines: ${lineCount}`;
+ 	if (textArea === outputCode && inputCode.value) {
+ 		const inputSize = inputCode.value.length;
+ 		const outputSize = outputCode.value.length;
+ 		const ratio = ((outputSize - inputSize) / inputSize * 100).toFixed(2);
+ 		sizeComparison.innerHTML = `Original: ${inputSize} | Obfuscated: ${outputSize}`;
+ 		compressionRatio.innerHTML = `<span class="icon">📊</span> Obfuscation ratio: ${ratio}%`;
+ 	}
+ }
 
-        // Function to update code statistics
-        function updateCodeStats(textArea, statsDiv) {
-            const text = textArea.value;
-            const charCount = text.length;
-            const lineCount = text.split('\n').length;
-            
-            statsDiv.innerHTML = `Characters: ${charCount} | Lines: ${lineCount}`;
-            
-            if (textArea === outputCode && inputCode.value) {
-                const inputSize = inputCode.value.length;
-                const outputSize = outputCode.value.length;
-                const ratio = ((outputSize - inputSize) / inputSize * 100).toFixed(2);
-                
-                sizeComparison.innerHTML = `Original: ${inputSize} | Obfuscated: ${outputSize}`;
-                compressionRatio.innerHTML = `<span class="icon">📊</span> Obfuscation ratio: ${ratio}%`;
-            }
-        }
+ function showNotification(message, type = 'success') {
+ 	notification.textContent = message;
+ 	notification.className = `notification ${type} show`;
+ 	setTimeout(() => {
+ 		notification.classList.remove('show');
+ 	}, 3000);
+ }
 
-        // Function to show notification
-        function showNotification(message, type = 'success') {
-            notification.textContent = message;
-            notification.className = `notification ${type} show`;
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+ function obfuscateCode() {
+ 	const code = inputCode.value.trim();
+ 	if (!code) {
+ 		showNotification('Please enter some JavaScript code', 'error');
+ 		return;
+ 	}
+ 	obfuscateBtn.classList.add('loading');
+ 	try {
+ 		const options = getOptions();
+ 		const obfuscationResult = JavaScriptObfuscator.obfuscate(code, options);
+ 		outputCode.value = obfuscationResult.getObfuscatedCode();
+ 		updateLineNumbers(outputCode, outputLineNumbers);
+ 		updateCodeStats(outputCode, outputStats);
+ 		obfuscateBtn.classList.remove('loading');
+ 		showNotification('Code obfuscated successfully');
+ 	} catch (error) {
+ 		obfuscateBtn.classList.remove('loading');
+ 		console.error(error);
+ 		showNotification(`Error: ${error.message}`, 'error');
+ 	}
+ }
 
-        // Function to obfuscate code
-        function obfuscateCode() {
-            const code = inputCode.value.trim();
-            
-            if (!code) {
-                showNotification('Please enter some JavaScript code', 'error');
-                return;
-            }
-            
-            // Show loading state
-            obfuscateBtn.classList.add('loading');
-            
-            try {
-                // Get options from UI
-                const options = getOptions();
-                
-                // Perform obfuscation
-                const obfuscationResult = JavaScriptObfuscator.obfuscate(code, options);
-                outputCode.value = obfuscationResult.getObfuscatedCode();
-                
-                // Update UI
-                updateLineNumbers(outputCode, outputLineNumbers);
-                updateCodeStats(outputCode, outputStats);
-                
-                // Hide loading state
-                obfuscateBtn.classList.remove('loading');
-                
-                // Show success notification
-                showNotification('Code obfuscated successfully');
-            } catch (error) {
-                // Hide loading state
-                obfuscateBtn.classList.remove('loading');
-                
-                // Show error notification
-                console.error(error);
-                showNotification(`Error: ${error.message}`, 'error');
-            }
-        }
+ function copyToClipboard() {
+ 	outputCode.select();
+ 	document.execCommand('copy');
+ 	showNotification('Copied to clipboard');
+ }
 
-        // Function to copy obfuscated code to clipboard
-        function copyToClipboard() {
-            outputCode.select();
-            document.execCommand('copy');
-            showNotification('Copied to clipboard');
-        }
+ function downloadCode() {
+ 	const code = outputCode.value;
+ 	if (!code) {
+ 		showNotification('No obfuscated code to download', 'error');
+ 		return;
+ 	}
+ 	const filename = document.getElementById('defaultFilename')?.value || 'obfuscated.js';
+ 	const blob = new Blob([code], {
+ 		type: 'text/javascript'
+ 	});
+ 	const link = document.createElement('a');
+ 	link.href = URL.createObjectURL(blob);
+ 	link.download = filename;
+ 	link.click();
+ 	showNotification(`Downloaded as ${filename}`);
+ }
 
-        // Function to download obfuscated code
-		function downloadCode() {
-			const code = outputCode.value;
-			
-			if (!code) {
-				showNotification('No obfuscated code to download', 'error');
-				return;
-			}
-			
-			const filename = optionElements.defaultFilename.value || 'obfuscated.js';
-			const blob = new Blob([code], { type: 'text/javascript' });
-			const link = document.createElement('a');
-			link.href = URL.createObjectURL(blob);
-			link.download = filename;
-			link.click();
-			
-			showNotification(`Downloaded as ${filename}`);
-		}
+ function saveConfig() {
+ 	const options = getOptions();
+ 	const configJson = JSON.stringify(options, null, 2);
+ 	const blob = new Blob([configJson], {
+ 		type: 'application/json'
+ 	});
+ 	const link = document.createElement('a');
+ 	link.href = URL.createObjectURL(blob);
+ 	link.download = 'obfuscator-config.json';
+ 	link.click();
+ 	showNotification('Configuration saved');
+ }
 
-        // Function to save configuration
-        function saveConfig() {
-            const options = getOptions();
-            const configJson = JSON.stringify(options, null, 2);
-            
-            const blob = new Blob([configJson], { type: 'application/json' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'obfuscator-config.json';
-            link.click();
-            
-            showNotification('Configuration saved');
-        }
+ function loadConfig(configJson) {
+ 	try {
+ 		const config = JSON.parse(configJson);
+ 		for (const [key, value] of Object.entries(config)) {
+ 			if (key === 'stringArrayEncoding') {
+ 				optionElements.encodeBase64.checked = value.includes('base64');
+ 				optionElements.encodeRC4.checked = value.includes('rc4');
+ 			} else if (key in optionElements) {
+ 				const element = optionElements[key];
+ 				if (element.type === 'checkbox') {
+ 					element.checked = value;
+ 				} else if (element.type === 'range' || element.type === 'number' || element.type === 'text') {
+ 					element.value = value;
+ 				} else if (element.tagName === 'SELECT') {
+ 					element.value = value;
+ 				}
+ 			}
+ 		}
+ 		presetSelect.value = 'custom';
+ 		showNotification('Configuration loaded');
+ 	} catch (error) {
+ 		showNotification(`Error loading configuration: ${error.message}`, 'error');
+ 	}
+ }
 
-        // Function to load configuration
-        function loadConfig(configJson) {
-            try {
-                const config = JSON.parse(configJson);
-                
-                for (const [key, value] of Object.entries(config)) {
-                    if (key === 'stringArrayEncoding') {
-                        optionElements.encodeBase64.checked = value.includes('base64');
-                        optionElements.encodeRC4.checked = value.includes('rc4');
-                    } else if (key in optionElements) {
-                        const element = optionElements[key];
-                        
-                        if (element.type === 'checkbox') {
-                            element.checked = value;
-                        } else if (element.type === 'range' || element.type === 'number' || element.type === 'text') {
-                            element.value = value;
-                        } else if (element.tagName === 'SELECT') {
-                            element.value = value;
-                        }
-                    }
-                }
-                
-                // Set preset to custom
-                presetSelect.value = 'custom';
-                
-                showNotification('Configuration loaded');
-            } catch (error) {
-                showNotification(`Error loading configuration: ${error.message}`, 'error');
-            }
-        }
+ function minifyCode() {
+ 	const code = inputCode.value.trim();
+ 	if (!code) {
+ 		showNotification('Please enter some JavaScript code', 'error');
+ 		return;
+ 	}
+ 	try {
+ 		const minifyOptions = {
+ 			compact: true,
+ 			controlFlowFlattening: false,
+ 			deadCodeInjection: false,
+ 			debugProtection: false,
+ 			disableConsoleOutput: false,
+ 			identifierNamesGenerator: 'hexadecimal',
+ 			renameGlobals: false,
+ 			selfDefending: false,
+ 			simplify: true,
+ 			stringArray: false,
+ 			stringArrayEncoding: [],
+ 			stringArrayThreshold: 0,
+ 			unicodeEscapeSequence: false
+ 		};
+ 		const result = JavaScriptObfuscator.obfuscate(code, minifyOptions);
+ 		outputCode.value = result.getObfuscatedCode();
+ 		updateLineNumbers(outputCode, outputLineNumbers);
+ 		updateCodeStats(outputCode, outputStats);
+ 		showNotification('Code minified');
+ 	} catch (error) {
+ 		showNotification(`Error minifying code: ${error.message}`, 'error');
+ 	}
+ }
 
-        // Function to minify code
-        function minifyCode() {
-            const code = inputCode.value.trim();
-            
-            if (!code) {
-                showNotification('Please enter some JavaScript code', 'error');
-                return;
-            }
-            
-            try {
-                // Simple minification using the obfuscator with minimal options
-                const minifyOptions = {
-                    compact: true,
-                    controlFlowFlattening: false,
-                    deadCodeInjection: false,
-                    debugProtection: false,
-                    disableConsoleOutput: false,
-                    identifierNamesGenerator: 'hexadecimal',
-                    renameGlobals: false,
-                    selfDefending: false,
-                    simplify: true,
-                    stringArray: false,
-                    stringArrayEncoding: [],
-                    stringArrayThreshold: 0,
-                    unicodeEscapeSequence: false
-                };
-                
-                const result = JavaScriptObfuscator.obfuscate(code, minifyOptions);
-                outputCode.value = result.getObfuscatedCode();
-                
-                // Update UI
-                updateLineNumbers(outputCode, outputLineNumbers);
-                updateCodeStats(outputCode, outputStats);
-                
-                showNotification('Code minified');
-            } catch (error) {
-                showNotification(`Error minifying code: ${error.message}`, 'error');
-            }
-        }
-
-        // Function to beautify/prettify code
-        function beautifyCode(inputElement = outputCode) {
-            const code = inputElement.value.trim();
-            
-            if (!code) {
-                showNotification(`No code to beautify`, 'error');
-                return;
-            }
-            
-            try {
-                // Simple beautification
-                // This is a basic implementation that adds indentation
-                // A real beautifier would be more sophisticated
-                let result = '';
-                let indentLevel = 0;
-                let inString = false;
-                let stringChar = '';
-                let escaped = false;
-                
-                for (let i = 0; i < code.length; i++) {
-                    const char = code[i];
-                    const nextChar = code[i + 1] || '';
-                    
-                    // Handle strings
-                    if ((char === '"' || char === "'" || char === '`') && !escaped) {
-                        if (inString && char === stringChar) {
-                            inString = false;
-                        } else if (!inString) {
-                            inString = true;
-                            stringChar = char;
-                        }
-                    }
-                    
-                    // Track escape sequences
-                    escaped = char === '\\' && !escaped;
-                    
-                    // Only process brackets if not in a string
-                    if (!inString) {
-                        if (char === '{' || char === '[') {
-                            result += char;
-                            indentLevel++;
-                            result += '\n' + ' '.repeat(indentLevel * 4);
-                            continue;
-                        } else if (char === '}' || char === ']') {
-                            indentLevel--;
-                            result += '\n' + ' '.repeat(indentLevel * 4) + char;
-                            continue;
-                        } else if (char === ';') {
-                            result += char;
-                            result += '\n' + ' '.repeat(indentLevel * 4);
-                            continue;
-                        } else if (char === ',' && (nextChar !== '\n' && nextChar !== ' ')) {
-                            result += char;
-                            result += '\n' + ' '.repeat(indentLevel * 4);
-                            continue;
-                        }
-                    }
-                    
-                    result += char;
-                }
-                
-                inputElement.value = result;
-                
-                // Update UI
-                if (inputElement === inputCode) {
-                    updateLineNumbers(inputCode, inputLineNumbers);
-                    updateCodeStats(inputCode, inputStats);
-                } else {
-                    updateLineNumbers(outputCode, outputLineNumbers);
-                    updateCodeStats(outputCode, outputStats);
-                }
-                
-                showNotification('Code beautified');
-            } catch (error) {
-                showNotification(`Error beautifying code: ${error.message}`, 'error');
-            }
-        }
-
-        // Event Listeners
-        window.addEventListener('load', initUI);
-        
-        inputCode.addEventListener('input', () => {
-            updateLineNumbers(inputCode, inputLineNumbers);
-            updateCodeStats(inputCode, inputStats);
-        });
-        
-        outputCode.addEventListener('input', () => {
-            updateLineNumbers(outputCode, outputLineNumbers);
-            updateCodeStats(outputCode, outputStats);
-        });
-        
-        obfuscateBtn.addEventListener('click', obfuscateCode);
-        copyBtn.addEventListener('click', copyToClipboard);
-        downloadBtn.addEventListener('click', downloadCode);
-        clearInputBtn.addEventListener('click', () => {
-            inputCode.value = '';
-            updateLineNumbers(inputCode, inputLineNumbers);
-            updateCodeStats(inputCode, inputStats);
-        });
-        
-        presetSelect.addEventListener('change', (e) => {
-            applyPreset(e.target.value);
-        });
-        
-        toggleOptionsBtn.addEventListener('click', toggleOptions);
-        optionsHeader.addEventListener('click', toggleOptions);
-        
-        sampleCodeBtn.addEventListener('click', () => {
-            inputCode.value = sampleCode;
-            updateLineNumbers(inputCode, inputLineNumbers);
-            updateCodeStats(inputCode, inputStats);
-        });
-        
-        minifyBtn.addEventListener('click', minifyCode);
-        beautifyBtn.addEventListener('click', () => beautifyCode(inputCode));
-        prettifyBtn.addEventListener('click', () => beautifyCode(outputCode));
-        
-        loadFileBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
-        
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                inputCode.value = event.target.result;
-                updateLineNumbers(inputCode, inputLineNumbers);
-                updateCodeStats(inputCode, inputStats);
-                showNotification(`File loaded: ${file.name}`);
-            };
-            reader.readAsText(file);
-        });
-        
-        saveConfigBtn.addEventListener('click', saveConfig);
-        
-        loadConfigBtn.addEventListener('click', () => {
-            configInput.click();
-        });
-        
-        configInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                loadConfig(event.target.result);
-            };
-            reader.readAsText(file);
-        });
+ function beautifyCode(inputElement = outputCode) {
+ 	const code = inputElement.value.trim();
+ 	if (!code) {
+ 		showNotification(`No code to beautify`, 'error');
+ 		return;
+ 	}
+ 	try {
+ 		let result = '';
+ 		let indentLevel = 0;
+ 		let inString = false;
+ 		let stringChar = '';
+ 		let escaped = false;
+ 		for (let i = 0; i < code.length; i++) {
+ 			const char = code[i];
+ 			const nextChar = code[i + 1] || '';
+ 			if ((char === '"' || char === "'" || char === '`') && !escaped) {
+ 				if (inString && char === stringChar) {
+ 					inString = false;
+ 				} else if (!inString) {
+ 					inString = true;
+ 					stringChar = char;
+ 				}
+ 			}
+ 			escaped = char === '\\' && !escaped;
+ 			if (!inString) {
+ 				if (char === '{' || char === '[') {
+ 					result += char;
+ 					indentLevel++;
+ 					result += '\n' + ' '.repeat(indentLevel * 4);
+ 					continue;
+ 				} else if (char === '}' || char === ']') {
+ 					indentLevel--;
+ 					result += '\n' + ' '.repeat(indentLevel * 4) + char;
+ 					continue;
+ 				} else if (char === ';') {
+ 					result += char;
+ 					result += '\n' + ' '.repeat(indentLevel * 4);
+ 					continue;
+ 				} else if (char === ',' && (nextChar !== '\n' && nextChar !== ' ')) {
+ 					result += char;
+ 					result += '\n' + ' '.repeat(indentLevel * 4);
+ 					continue;
+ 				}
+ 			}
+ 			result += char;
+ 		}
+ 		inputElement.value = result;
+ 		if (inputElement === inputCode) {
+ 			updateLineNumbers(inputCode, inputLineNumbers);
+ 			updateCodeStats(inputCode, inputStats);
+ 		} else {
+ 			updateLineNumbers(outputCode, outputLineNumbers);
+ 			updateCodeStats(outputCode, outputStats);
+ 		}
+ 		showNotification('Code beautified');
+ 	} catch (error) {
+ 		showNotification(`Error beautifying code: ${error.message}`, 'error');
+ 	}
+ }
+ window.addEventListener('load', initUI);
+ inputCode.addEventListener('input', () => {
+ 	updateLineNumbers(inputCode, inputLineNumbers);
+ 	updateCodeStats(inputCode, inputStats);
+ });
+ outputCode.addEventListener('input', () => {
+ 	updateLineNumbers(outputCode, outputLineNumbers);
+ 	updateCodeStats(outputCode, outputStats);
+ });
+ obfuscateBtn.addEventListener('click', obfuscateCode);
+ copyBtn.addEventListener('click', copyToClipboard);
+ downloadBtn.addEventListener('click', downloadCode);
+ clearInputBtn.addEventListener('click', () => {
+ 	inputCode.value = '';
+ 	updateLineNumbers(inputCode, inputLineNumbers);
+ 	updateCodeStats(inputCode, inputStats);
+ });
+ presetSelect.addEventListener('change', (e) => {
+ 	applyPreset(e.target.value);
+ });
+ toggleOptionsBtn.addEventListener('click', toggleOptions);
+ optionsHeader.addEventListener('click', toggleOptions);
+ sampleCodeBtn.addEventListener('click', () => {
+ 	inputCode.value = sampleCode;
+ 	updateLineNumbers(inputCode, inputLineNumbers);
+ 	updateCodeStats(inputCode, inputStats);
+ });
+ minifyBtn.addEventListener('click', minifyCode);
+ beautifyBtn.addEventListener('click', () => beautifyCode(inputCode));
+ prettifyBtn.addEventListener('click', () => beautifyCode(outputCode));
+ loadFileBtn.addEventListener('click', () => {
+ 	fileInput.click();
+ });
+ fileInput.addEventListener('change', (e) => {
+ 	const file = e.target.files[0];
+ 	if (!file) return;
+ 	const reader = new FileReader();
+ 	reader.onload = (event) => {
+ 		inputCode.value = event.target.result;
+ 		updateLineNumbers(inputCode, inputLineNumbers);
+ 		updateCodeStats(inputCode, inputStats);
+ 		showNotification(`File loaded: ${file.name}`);
+ 	};
+ 	reader.readAsText(file);
+ });
+ saveConfigBtn.addEventListener('click', saveConfig);
+ loadConfigBtn.addEventListener('click', () => {
+ 	configInput.click();
+ });
+ configInput.addEventListener('change', (e) => {
+ 	const file = e.target.files[0];
+ 	if (!file) return;
+ 	const reader = new FileReader();
+ 	reader.onload = (event) => {
+ 		loadConfig(event.target.result);
+ 	};
+ 	reader.readAsText(file);
+ });
     </script>
 </body>
 </html>
