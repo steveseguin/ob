@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Obfuscator Tool</title>
+    <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator/dist/index.browser.js"></script>
+    <style>
+        :root {
+            --bg-primary: #1e1e2e;
+            --bg-secondary: #292a3a;
+            --bg-tertiary: #313244;
+            --text-primary: #cdd6f4;
+            --text-secondary: #a6adc8;
+            --accent: #89b4fa;
+            --error: #f38ba8;
+            --success: #a6e3a1;
+            --warning: #f9e2af;
+            --border: #45475a;
+            --input-bg: #13141f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+		.editor {
+			flex: 1 1 500px;
+			display: flex;
+			flex-direction: column;
+			background-color: var(--bg-secondary);
+			border-radius: 8px;
+			overflow: hidden;
+			border: 1px solid var(--border);
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+			margin-bottom: 10px;
+		}
+
+        .editor-header {
+            background-color: var(--bg-tertiary);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        textarea {
+            height: 450px;
+            padding: 15px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            border: none;
+            resize: none;
+            flex: 1;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        .options {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: max-height 0.3s ease;
+            overflow: hidden;
+        }
+
+        .options.collapsed {
+            max-height: 82px;
+        }
+
+        .options.expanded {
+            max-height: 1000px;
+        }
+
+        .options-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .options-toggle {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .options.collapsed .options-toggle {
+            transform: rotate(180deg);
+        }
+
+        .options-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 15px;
+			margin-top: 15px;
+		}
+
+
+        .option-group {
+			background-color: var(--bg-tertiary);
+			padding: 15px;
+			border-radius: 6px;
+			border: 1px solid var(--border);
+			margin-bottom: 8px;
+		}
+
+        .option-group h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-top: 5px;
+            accent-color: var(--accent);
+        }
+
+        input[type="number"] {
+            width: 60px;
+            padding: 4px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        button {
+            padding: 8px 15px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        button:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        button.secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        button.success {
+            background: var(--success);
+        }
+
+        button.warning {
+            background: var(--warning);
+            color: #000;
+        }
+
+        button.error {
+            background: var(--error);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background-color: var(--bg-tertiary);
+            border-top: 1px solid var(--border);
+        }
+
+        .action-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        select {
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .preset-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-bar {
+            background-color: var(--bg-tertiary);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 4px;
+            color: #000;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .notification.success {
+            background-color: var(--success);
+        }
+
+        .notification.error {
+            background-color: var(--error);
+            color: white;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .line-numbers {
+            padding: 15px 8px;
+            text-align: right;
+            color: var(--text-secondary);
+            background-color: var(--bg-tertiary);
+            border-right: 1px solid var(--border);
+            min-width: 40px;
+            user-select: none;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .code-panel {
+            display: flex;
+            flex: 1;
+        }
+
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            min-width: 180px;
+            z-index: 100;
+            display: none;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .dropdown-divider {
+            border-top: 1px solid var(--border);
+            margin: 4px 0;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .icon {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .size-counter {
+            margin-left: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .editor {
+                flex: none;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        .loader {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--bg-tertiary);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading .loader {
+            display: inline-block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            border-top-color: currentColor;
+            border-bottom-color: currentColor;
+            animation: spin 1s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Obfuscator Tool</h1>
+    
+    <div class="header-controls">
+        <div class="preset-container">
+            <label for="preset">Preset:</label>
+            <select id="preset">
+                <option value="default">Default - High Performance</option>
+                <option value="low">Low Obfuscation - High Performance</option>
+                <option value="medium">Medium Obfuscation - Optimal Performance</option>
+                <option value="high">High Obfuscation - Low Performance</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+        
+        <div class="action-group">
+            <button id="toggleOptions" class="secondary">
+                <span class="icon">⚙️</span> Advanced Options
+            </button>
+            
+            <div class="dropdown-container">
+                <button id="moreBtn" class="secondary">
+                    <span class="icon">⋯</span> More
+                </button>
+                <div class="dropdown-menu" id="moreMenu">
+                    <div class="dropdown-item" id="loadFileBtn">
+                        <span class="icon">📂</span> Load File
+                    </div>
+                    <div class="dropdown-item" id="saveConfigBtn">
+                        <span class="icon">💾</span> Save Config
+                    </div>
+                    <div class="dropdown-item" id="loadConfigBtn">
+                        <span class="icon">📋</span> Load Config
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item" id="minifyBtn">
+                        <span class="icon">📏</span> Minify Only
+                    </div>
+                    <div class="dropdown-item" id="beautifyBtn">
+                        <span class="icon">🔍</span> Beautify Code
+                    </div>
+                </div>
+            </div>
+            
+            <input type="file" id="fileInput" class="file-input" accept=".js">
+            <input type="file" id="configInput" class="file-input" accept=".json">
+        </div>
+    </div>
+
+    <div class="options collapsed" id="optionsPanel">
+        <div class="options-header" id="optionsHeader">
+            <h2>Advanced Options</h2>
+            <div class="options-toggle">▲</div>
+        </div>
+        
+        <div class="options-grid">
+            <div class="option-group">
+                <h3>Code Structure</h3>
+                <label><input type="checkbox" id="compact" checked> Compact Code</label>
+                <label><input type="checkbox" id="controlFlowFlattening"> Control Flow Flattening</label>
+                <label>Threshold: <input type="range" id="controlFlowFlatteningThreshold" min="0" max="1" step="0.1" value="0.75"></label>
+                <label><input type="checkbox" id="deadCodeInjection"> Dead Code Injection</label>
+                <label>Threshold: <input type="range" id="deadCodeInjectionThreshold" min="0" max="1" step="0.1" value="0.4"></label>
+                <label><input type="checkbox" id="simplify" checked> Simplify Code</label>
+            </div>
+            
+            <div class="option-group">
+                <h3>Identifiers</h3>
+                <label>
+                    Generator:
+                    <select id="identifierNamesGenerator">
+                        <option value="hexadecimal">Hexadecimal</option>
+                        <option value="mangled">Mangled</option>
+                        <option value="mangled-shuffled">Mangled Shuffled</option>
+                        <option value="dictionary">Dictionary</option>
+                    </select>
+                </label>
+                <label><input type="checkbox" id="renameGlobals"> Rename Globals</label>
+                <label><input type="checkbox" id="transformObjectKeys"> Transform Object Keys</label>
+                <label>Identifier Prefix: <input type="text" id="identifiersPrefix" style="width: 80px;"></label>
+            </div>
+            
+            <div class="option-group">
+                <h3>String Transformations</h3>
+                <label><input type="checkbox" id="stringArray" checked> String Array</label>
+                <label>Threshold: <input type="range" id="stringArrayThreshold" min="0" max="1" step="0.05" value="0.75"></label>
+                <label><input type="checkbox" id="splitStrings"> Split Strings</label>
+                <label>Chunk Length: <input type="number" id="splitStringsChunkLength" min="1" max="20" value="10"></label>
+                <label><input type="checkbox" id="unicodeEscapeSequence"> Unicode Escape Sequence</label>
+            </div>
+            
+            <div class="option-group">
+                <h3>String Array Options</h3>
+                <label><input type="checkbox" id="stringArrayCallsTransform"> Calls Transform</label>
+                <label>Transform Threshold: <input type="range" id="stringArrayCallsTransformThreshold" min="0" max="1" step="0.1" value="0.5"></label>
+                <label><input type="checkbox" id="stringArrayRotate" checked> Rotate</label>
+                <label><input type="checkbox" id="stringArrayShuffle" checked> Shuffle</label>
+                <label><input type="checkbox" id="stringArrayIndexShift" checked> Index Shift</label>
+            </div>
+            
+            <div class="option-group">
+                <h3>String Array Encoding</h3>
+                <label><input type="checkbox" id="encodeBase64"> Base64</label>
+                <label><input type="checkbox" id="encodeRC4"> RC4</label>
+                <label>Wrappers Count: <input type="number" id="stringArrayWrappersCount" min="1" max="5" value="1"></label>
+                <label>
+                    Wrappers Type:
+                    <select id="stringArrayWrappersType">
+                        <option value="variable">Variable</option>
+                        <option value="function">Function</option>
+                    </select>
+                </label>
+                <label><input type="checkbox" id="stringArrayWrappersChainedCalls" checked> Chained Calls</label>
+            </div>
+            
+            <div class="option-group">
+                <h3>Numbers & Debug</h3>
+                <label><input type="checkbox" id="numbersToExpressions"> Numbers to Expressions</label>
+                <label><input type="checkbox" id="debugProtection"> Debug Protection</label>
+                <label><input type="checkbox" id="disableConsoleOutput"> Disable Console Output</label>
+                <label><input type="checkbox" id="selfDefending"> Self Defending</label>
+                <label>
+                    Target Environment:
+                    <select id="target">
+                        <option value="browser">Browser</option>
+                        <option value="browser-no-eval">Browser (No Eval)</option>
+                        <option value="node">Node.js</option>
+                    </select>
+                </label>
+				<label>Default Filename: <input type="text" id="defaultFilename" value="obfuscated.js" style="width: 120px;"></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="editor">
+            <div class="editor-header">
+                <h3>Input JavaScript</h3>
+                <div class="action-group">
+                    <button id="sampleCodeBtn" class="secondary">
+                        <span class="icon">📋</span> Sample
+                    </button>
+                    <button id="clearInputBtn" class="secondary">
+                        <span class="icon">🗑️</span> Clear
+                    </button>
+                </div>
+            </div>
+            <div class="code-panel">
+                <div id="inputLineNumbers" class="line-numbers"></div>
+                <div class="editor-container">
+                    <textarea id="inputCode" placeholder="Paste your JavaScript code here">(function(){
+    var variable1 = '5' - 3;
+    var variable2 = '5' + 3;
+    var variable3 = '5' + - '2';
+    var variable4 = ['10','10','10','10','10'].map(parseInt);
+    var variable5 = 'foo ' + 1 + 1;
+    console.log(variable1);
+    console.log(variable2);
+    console.log(variable3);
+    console.log(variable4);
+    console.log(variable5);
+})();</textarea>
+                </div>
+            </div>
+            <div class="status-bar">
+                <div id="inputStats">Characters: 0 | Lines: 0</div>
+            </div>
+            <div class="actions">
+                <button id="obfuscateBtn" class="success">
+                    <div class="loader"></div>
+                    <span class="icon">🔒</span> Obfuscate
+                </button>
+            </div>
+        </div>
+        
+        <div class="editor">
+            <div class="editor-header">
+                <h3>Obfuscated Result</h3>
+                <div class="action-group">
+                    <button id="copyBtn" class="secondary">
+                        <span class="icon">📋</span> Copy
+                    </button>
+                    <button id="downloadBtn" class="secondary">
+                        <span class="icon">💾</span> Download
+                    </button>
+                </div>
+            </div>
+            <div class="code-panel">
+                <div id="outputLineNumbers" class="line-numbers"></div>
+                <div class="editor-container">
+                    <textarea id="outputCode" readonly></textarea>
+                </div>
+            </div>
+            <div class="status-bar">
+                <div id="outputStats">Characters: 0 | Lines: 0</div>
+                <div id="sizeComparison"></div>
+            </div>
+            <div class="actions">
+                <button id="prettifyBtn" class="secondary">
+                    <span class="icon">🔍</span> Prettify
+                </button>
+                
+                <div class="size-counter" id="compressionRatio">
+                    <span class="icon">📊</span> Obfuscation ratio: 0%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // DOM Elements
+        const inputCode = document.getElementById('inputCode');
+        const outputCode = document.getElementById('outputCode');
+        const obfuscateBtn = document.getElementById('obfuscateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const clearInputBtn = document.getElementById('clearInputBtn');
+        const presetSelect = document.getElementById('preset');
+        const toggleOptionsBtn = document.getElementById('toggleOptions');
+        const optionsPanel = document.getElementById('optionsPanel');
+        const optionsHeader = document.getElementById('optionsHeader');
+        const inputLineNumbers = document.getElementById('inputLineNumbers');
+        const outputLineNumbers = document.getElementById('outputLineNumbers');
+        const inputStats = document.getElementById('inputStats');
+        const outputStats = document.getElementById('outputStats');
+        const sizeComparison = document.getElementById('sizeComparison');
+        const compressionRatio = document.getElementById('compressionRatio');
+        const notification = document.getElementById('notification');
+        const moreBtn = document.getElementById('moreBtn');
+        const moreMenu = document.getElementById('moreMenu');
+        const sampleCodeBtn = document.getElementById('sampleCodeBtn');
+        const minifyBtn = document.getElementById('minifyBtn');
+        const beautifyBtn = document.getElementById('beautifyBtn');
+        const prettifyBtn = document.getElementById('prettifyBtn');
+        const loadFileBtn = document.getElementById('loadFileBtn');
+        const fileInput = document.getElementById('fileInput');
+        const saveConfigBtn = document.getElementById('saveConfigBtn');
+        const loadConfigBtn = document.getElementById('loadConfigBtn');
+        const configInput = document.getElementById('configInput');
+
+        // Sample code
+        const sampleCode = `// Object with methods and properties
+const calculator = {
+    add: function(a, b) {
+        return a + b;
+    },
+    subtract: function(a, b) {
+        return a - b;
+    },
+    multiply: function(a, b) {
+        return a * b;
+    },
+    divide: function(a, b) {
+        if (b === 0) {
+            throw new Error("Division by zero");
+        }
+        return a / b;
+    },
+    power: function(base, exponent) {
+        return Math.pow(base, exponent);
+    },
+    pi: 3.14159,
+    e: 2.71828
+};
+
+// Function that uses the calculator
+function performCalculations() {
+    const results = [];
+    results.push(calculator.add(10, 5));
+    results.push(calculator.subtract(10, 5));
+    results.push(calculator.multiply(10, 5));
+    results.push(calculator.divide(10, 5));
+    results.push(calculator.power(10, 2));
+    
+    // String operations
+    const message = "Calculation results:";
+    
+    console.log(message);
+    for (let i = 0; i < results.length; i++) {
+        console.log(\`Result \${i + 1}: \${results[i]}\`);
+    }
+    
+    return {
+        results: results,
+        constants: {
+            pi: calculator.pi,
+            e: calculator.e
+        }
+    };
+}
+
+// Call the function
+const calcResults = performCalculations();
+console.log("Constants:", calcResults.constants);
+`;
+
+        // Option elements
+        const optionElements = {
+            compact: document.getElementById('compact'),
+            controlFlowFlattening: document.getElementById('controlFlowFlattening'),
+            controlFlowFlatteningThreshold: document.getElementById('controlFlowFlatteningThreshold'),
+            deadCodeInjection: document.getElementById('deadCodeInjection'),
+            deadCodeInjectionThreshold: document.getElementById('deadCodeInjectionThreshold'),
+            debugProtection: document.getElementById('debugProtection'),
+            disableConsoleOutput: document.getElementById('disableConsoleOutput'),
+            identifierNamesGenerator: document.getElementById('identifierNamesGenerator'),
+            identifiersPrefix: document.getElementById('identifiersPrefix'),
+            numbersToExpressions: document.getElementById('numbersToExpressions'),
+            renameGlobals: document.getElementById('renameGlobals'),
+            selfDefending: document.getElementById('selfDefending'),
+            simplify: document.getElementById('simplify'),
+            splitStrings: document.getElementById('splitStrings'),
+            splitStringsChunkLength: document.getElementById('splitStringsChunkLength'),
+            stringArray: document.getElementById('stringArray'),
+            stringArrayCallsTransform: document.getElementById('stringArrayCallsTransform'),
+            stringArrayCallsTransformThreshold: document.getElementById('stringArrayCallsTransformThreshold'),
+            stringArrayThreshold: document.getElementById('stringArrayThreshold'),
+            stringArrayRotate: document.getElementById('stringArrayRotate'),
+            stringArrayShuffle: document.getElementById('stringArrayShuffle'),
+            stringArrayIndexShift: document.getElementById('stringArrayIndexShift'),
+            stringArrayWrappersCount: document.getElementById('stringArrayWrappersCount'),
+            stringArrayWrappersType: document.getElementById('stringArrayWrappersType'),
+            stringArrayWrappersChainedCalls: document.getElementById('stringArrayWrappersChainedCalls'),
+            target: document.getElementById('target'),
+            transformObjectKeys: document.getElementById('transformObjectKeys'),
+            unicodeEscapeSequence: document.getElementById('unicodeEscapeSequence'),
+            encodeBase64: document.getElementById('encodeBase64'),
+            encodeRC4: document.getElementById('encodeRC4'),
+        };
+
+        // Presets
+        const presets = {
+            default: {
+                compact: true,
+                controlFlowFlattening: false,
+                deadCodeInjection: false,
+                debugProtection: false,
+                disableConsoleOutput: false,
+                identifierNamesGenerator: 'hexadecimal',
+                identifiersPrefix: '',
+                numbersToExpressions: false,
+                renameGlobals: false,
+                selfDefending: false,
+                simplify: true,
+                splitStrings: false,
+                stringArray: true,
+                stringArrayCallsTransform: false,
+                stringArrayCallsTransformThreshold: 0.5,
+                stringArrayIndexShift: true,
+                stringArrayRotate: true,
+                stringArrayShuffle: true,
+                stringArrayThreshold: 0.75,
+                stringArrayWrappersCount: 1,
+                stringArrayWrappersType: 'variable',
+                stringArrayWrappersChainedCalls: true,
+                target: 'browser',
+                transformObjectKeys: false,
+                unicodeEscapeSequence: false,
+                stringArrayEncoding: [],
+				defaultFilename: 'obfuscated.js',
+            },
+            low: {
+                compact: true,
+                controlFlowFlattening: false,
+                deadCodeInjection: false,
+                debugProtection: false,
+                disableConsoleOutput: true,
+                identifierNamesGenerator: 'hexadecimal',
+                identifiersPrefix: '',
+                numbersToExpressions: false,
+                renameGlobals: false,
+                selfDefending: true,
+                simplify: true,
+                splitStrings: false,
+                stringArray: true,
+                stringArrayCallsTransform: false,
+                stringArrayCallsTransformThreshold: 0.5,
+                stringArrayIndexShift: true,
+                stringArrayRotate: true,
+                stringArrayShuffle: true,
+                stringArrayThreshold: 0.75,
+                stringArrayWrappersCount: 1,
+                stringArrayWrappersType: 'variable',
+                stringArrayWrappersChainedCalls: true,
+                target: 'browser',
+                transformObjectKeys: false,
+                unicodeEscapeSequence: false,
+                stringArrayEncoding: [],
+				defaultFilename: 'obfuscated.js',
+            },
+            medium: {
+				compact: true,
+				controlFlowFlattening: true,
+				controlFlowFlatteningThreshold: 0.75,
+				deadCodeInjection: true,
+				deadCodeInjectionThreshold: 0.4,
+				debugProtection: false,
+				disableConsoleOutput: true,
+				identifierNamesGenerator: 'hexadecimal',
+				identifiersPrefix: '',
+				numbersToExpressions: true,
+				renameGlobals: false,
+				selfDefending: true,
+				simplify: true,
+				splitStrings: true,
+				splitStringsChunkLength: 10,
+				stringArray: true,
+				stringArrayCallsTransform: true,
+				stringArrayCallsTransformThreshold: 0.75,
+				stringArrayIndexShift: true,
+				stringArrayRotate: true,
+				stringArrayShuffle: true,
+				stringArrayThreshold: 0.75,
+				stringArrayWrappersCount: 2,
+				stringArrayWrappersType: 'function',
+				stringArrayWrappersChainedCalls: true,
+				target: 'browser',
+				transformObjectKeys: true,
+				unicodeEscapeSequence: false,
+				stringArrayEncoding: ['base64'],
+				defaultFilename: 'obfuscated.js',
+			},
+            high: {
+				compact: true,
+				controlFlowFlattening: true,
+				controlFlowFlatteningThreshold: 1,
+				deadCodeInjection: true,
+				deadCodeInjectionThreshold: 1,
+				debugProtection: true,
+				disableConsoleOutput: true,
+				identifierNamesGenerator: 'hexadecimal',
+				identifiersPrefix: '',
+				numbersToExpressions: true,
+				renameGlobals: false,
+				selfDefending: true,
+				simplify: true,
+				splitStrings: true,
+				splitStringsChunkLength: 5,
+				stringArray: true,
+				stringArrayCallsTransform: true,
+				stringArrayCallsTransformThreshold: 1,
+				stringArrayIndexShift: true,
+				stringArrayRotate: true,
+				stringArrayShuffle: true,
+				stringArrayThreshold: 1,
+				stringArrayWrappersCount: 5,
+				stringArrayWrappersType: 'function',
+				stringArrayWrappersChainedCalls: true,
+				target: 'browser',
+				transformObjectKeys: true,
+				unicodeEscapeSequence: false,
+				stringArrayEncoding: ['rc4'],
+				defaultFilename: 'obfuscated.js',
+			}
+		};
+		
+	// Initialize UI state
+        function initUI() {
+            updateLineNumbers(inputCode, inputLineNumbers);
+            updateCodeStats(inputCode, inputStats);
+            
+            // Apply default preset
+            applyPreset('default');
+            
+            // Show the dropdown menu when clicking the more button
+            document.addEventListener('click', function(e) {
+                if (e.target === moreBtn || moreBtn.contains(e.target)) {
+                    moreMenu.classList.toggle('show');
+                } else {
+                    moreMenu.classList.remove('show');
+                }
+            });
+        }
+
+        // Function to toggle options panel
+        function toggleOptions() {
+            optionsPanel.classList.toggle('collapsed');
+            optionsPanel.classList.toggle('expanded');
+        }
+
+        // Function to apply presets
+		function applyPreset(presetName) {
+			if (presetName === 'custom') return;
+			
+			const preset = presets[presetName];
+			
+			for (const [key, element] of Object.entries(optionElements)) {
+				if (key in preset) {
+					if (element.type === 'checkbox') {
+						element.checked = preset[key];
+					} else if (element.type === 'range' || element.type === 'number' || element.type === 'text') {
+						element.value = preset[key];
+					} else if (element.tagName === 'SELECT') {
+						element.value = preset[key];
+					}
+				}
+			}
+			
+			// Set the defaultFilename value
+			document.getElementById('defaultFilename').value = preset.defaultFilename;
+			
+			// Handle encoding options separately
+			optionElements.encodeBase64.checked = preset.stringArrayEncoding.includes('base64');
+			optionElements.encodeRC4.checked = preset.stringArrayEncoding.includes('rc4');
+		}
+
+        // Function to get the current options from UI
+        function getOptions() {
+            const options = {};
+            
+            for (const [key, element] of Object.entries(optionElements)) {
+                if (element.type === 'checkbox') {
+                    options[key] = element.checked;
+                } else if (element.type === 'range' || element.type === 'number') {
+                    options[key] = parseFloat(element.value);
+                } else if (element.type === 'text') {
+                    options[key] = element.value;
+                } else if (element.tagName === 'SELECT') {
+                    options[key] = element.value;
+                }
+            }
+            options.defaultFilename = optionElements.defaultFilename.value;
+            // Build string array encoding array
+            const encodings = [];
+            if (optionElements.encodeBase64.checked) encodings.push('base64');
+            if (optionElements.encodeRC4.checked) encodings.push('rc4');
+            options.stringArrayEncoding = encodings;
+            
+            return options;
+        }
+
+        // Function to update line numbers
+        function updateLineNumbers(textArea, lineNumbersDiv) {
+            const lines = textArea.value.split('\n');
+            const lineCount = lines.length;
+            let lineNumbersHTML = '';
+            
+            for (let i = 1; i <= lineCount; i++) {
+                lineNumbersHTML += i + '<br>';
+            }
+            
+            lineNumbersDiv.innerHTML = lineNumbersHTML;
+        }
+
+        // Function to update code statistics
+        function updateCodeStats(textArea, statsDiv) {
+            const text = textArea.value;
+            const charCount = text.length;
+            const lineCount = text.split('\n').length;
+            
+            statsDiv.innerHTML = `Characters: ${charCount} | Lines: ${lineCount}`;
+            
+            if (textArea === outputCode && inputCode.value) {
+                const inputSize = inputCode.value.length;
+                const outputSize = outputCode.value.length;
+                const ratio = ((outputSize - inputSize) / inputSize * 100).toFixed(2);
+                
+                sizeComparison.innerHTML = `Original: ${inputSize} | Obfuscated: ${outputSize}`;
+                compressionRatio.innerHTML = `<span class="icon">📊</span> Obfuscation ratio: ${ratio}%`;
+            }
+        }
+
+        // Function to show notification
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Function to obfuscate code
+        function obfuscateCode() {
+            const code = inputCode.value.trim();
+            
+            if (!code) {
+                showNotification('Please enter some JavaScript code', 'error');
+                return;
+            }
+            
+            // Show loading state
+            obfuscateBtn.classList.add('loading');
+            
+            try {
+                // Get options from UI
+                const options = getOptions();
+                
+                // Perform obfuscation
+                const obfuscationResult = JavaScriptObfuscator.obfuscate(code, options);
+                outputCode.value = obfuscationResult.getObfuscatedCode();
+                
+                // Update UI
+                updateLineNumbers(outputCode, outputLineNumbers);
+                updateCodeStats(outputCode, outputStats);
+                
+                // Hide loading state
+                obfuscateBtn.classList.remove('loading');
+                
+                // Show success notification
+                showNotification('Code obfuscated successfully');
+            } catch (error) {
+                // Hide loading state
+                obfuscateBtn.classList.remove('loading');
+                
+                // Show error notification
+                console.error(error);
+                showNotification(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Function to copy obfuscated code to clipboard
+        function copyToClipboard() {
+            outputCode.select();
+            document.execCommand('copy');
+            showNotification('Copied to clipboard');
+        }
+
+        // Function to download obfuscated code
+		function downloadCode() {
+			const code = outputCode.value;
+			
+			if (!code) {
+				showNotification('No obfuscated code to download', 'error');
+				return;
+			}
+			
+			const filename = optionElements.defaultFilename.value || 'obfuscated.js';
+			const blob = new Blob([code], { type: 'text/javascript' });
+			const link = document.createElement('a');
+			link.href = URL.createObjectURL(blob);
+			link.download = filename;
+			link.click();
+			
+			showNotification(`Downloaded as ${filename}`);
+		}
+
+        // Function to save configuration
+        function saveConfig() {
+            const options = getOptions();
+            const configJson = JSON.stringify(options, null, 2);
+            
+            const blob = new Blob([configJson], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'obfuscator-config.json';
+            link.click();
+            
+            showNotification('Configuration saved');
+        }
+
+        // Function to load configuration
+        function loadConfig(configJson) {
+            try {
+                const config = JSON.parse(configJson);
+                
+                for (const [key, value] of Object.entries(config)) {
+                    if (key === 'stringArrayEncoding') {
+                        optionElements.encodeBase64.checked = value.includes('base64');
+                        optionElements.encodeRC4.checked = value.includes('rc4');
+                    } else if (key in optionElements) {
+                        const element = optionElements[key];
+                        
+                        if (element.type === 'checkbox') {
+                            element.checked = value;
+                        } else if (element.type === 'range' || element.type === 'number' || element.type === 'text') {
+                            element.value = value;
+                        } else if (element.tagName === 'SELECT') {
+                            element.value = value;
+                        }
+                    }
+                }
+                
+                // Set preset to custom
+                presetSelect.value = 'custom';
+                
+                showNotification('Configuration loaded');
+            } catch (error) {
+                showNotification(`Error loading configuration: ${error.message}`, 'error');
+            }
+        }
+
+        // Function to minify code
+        function minifyCode() {
+            const code = inputCode.value.trim();
+            
+            if (!code) {
+                showNotification('Please enter some JavaScript code', 'error');
+                return;
+            }
+            
+            try {
+                // Simple minification using the obfuscator with minimal options
+                const minifyOptions = {
+                    compact: true,
+                    controlFlowFlattening: false,
+                    deadCodeInjection: false,
+                    debugProtection: false,
+                    disableConsoleOutput: false,
+                    identifierNamesGenerator: 'hexadecimal',
+                    renameGlobals: false,
+                    selfDefending: false,
+                    simplify: true,
+                    stringArray: false,
+                    stringArrayEncoding: [],
+                    stringArrayThreshold: 0,
+                    unicodeEscapeSequence: false
+                };
+                
+                const result = JavaScriptObfuscator.obfuscate(code, minifyOptions);
+                outputCode.value = result.getObfuscatedCode();
+                
+                // Update UI
+                updateLineNumbers(outputCode, outputLineNumbers);
+                updateCodeStats(outputCode, outputStats);
+                
+                showNotification('Code minified');
+            } catch (error) {
+                showNotification(`Error minifying code: ${error.message}`, 'error');
+            }
+        }
+
+        // Function to beautify/prettify code
+        function beautifyCode(inputElement = outputCode) {
+            const code = inputElement.value.trim();
+            
+            if (!code) {
+                showNotification(`No code to beautify`, 'error');
+                return;
+            }
+            
+            try {
+                // Simple beautification
+                // This is a basic implementation that adds indentation
+                // A real beautifier would be more sophisticated
+                let result = '';
+                let indentLevel = 0;
+                let inString = false;
+                let stringChar = '';
+                let escaped = false;
+                
+                for (let i = 0; i < code.length; i++) {
+                    const char = code[i];
+                    const nextChar = code[i + 1] || '';
+                    
+                    // Handle strings
+                    if ((char === '"' || char === "'" || char === '`') && !escaped) {
+                        if (inString && char === stringChar) {
+                            inString = false;
+                        } else if (!inString) {
+                            inString = true;
+                            stringChar = char;
+                        }
+                    }
+                    
+                    // Track escape sequences
+                    escaped = char === '\\' && !escaped;
+                    
+                    // Only process brackets if not in a string
+                    if (!inString) {
+                        if (char === '{' || char === '[') {
+                            result += char;
+                            indentLevel++;
+                            result += '\n' + ' '.repeat(indentLevel * 4);
+                            continue;
+                        } else if (char === '}' || char === ']') {
+                            indentLevel--;
+                            result += '\n' + ' '.repeat(indentLevel * 4) + char;
+                            continue;
+                        } else if (char === ';') {
+                            result += char;
+                            result += '\n' + ' '.repeat(indentLevel * 4);
+                            continue;
+                        } else if (char === ',' && (nextChar !== '\n' && nextChar !== ' ')) {
+                            result += char;
+                            result += '\n' + ' '.repeat(indentLevel * 4);
+                            continue;
+                        }
+                    }
+                    
+                    result += char;
+                }
+                
+                inputElement.value = result;
+                
+                // Update UI
+                if (inputElement === inputCode) {
+                    updateLineNumbers(inputCode, inputLineNumbers);
+                    updateCodeStats(inputCode, inputStats);
+                } else {
+                    updateLineNumbers(outputCode, outputLineNumbers);
+                    updateCodeStats(outputCode, outputStats);
+                }
+                
+                showNotification('Code beautified');
+            } catch (error) {
+                showNotification(`Error beautifying code: ${error.message}`, 'error');
+            }
+        }
+
+        // Event Listeners
+        window.addEventListener('load', initUI);
+        
+        inputCode.addEventListener('input', () => {
+            updateLineNumbers(inputCode, inputLineNumbers);
+            updateCodeStats(inputCode, inputStats);
+        });
+        
+        outputCode.addEventListener('input', () => {
+            updateLineNumbers(outputCode, outputLineNumbers);
+            updateCodeStats(outputCode, outputStats);
+        });
+        
+        obfuscateBtn.addEventListener('click', obfuscateCode);
+        copyBtn.addEventListener('click', copyToClipboard);
+        downloadBtn.addEventListener('click', downloadCode);
+        clearInputBtn.addEventListener('click', () => {
+            inputCode.value = '';
+            updateLineNumbers(inputCode, inputLineNumbers);
+            updateCodeStats(inputCode, inputStats);
+        });
+        
+        presetSelect.addEventListener('change', (e) => {
+            applyPreset(e.target.value);
+        });
+        
+        toggleOptionsBtn.addEventListener('click', toggleOptions);
+        optionsHeader.addEventListener('click', toggleOptions);
+        
+        sampleCodeBtn.addEventListener('click', () => {
+            inputCode.value = sampleCode;
+            updateLineNumbers(inputCode, inputLineNumbers);
+            updateCodeStats(inputCode, inputStats);
+        });
+        
+        minifyBtn.addEventListener('click', minifyCode);
+        beautifyBtn.addEventListener('click', () => beautifyCode(inputCode));
+        prettifyBtn.addEventListener('click', () => beautifyCode(outputCode));
+        
+        loadFileBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                inputCode.value = event.target.result;
+                updateLineNumbers(inputCode, inputLineNumbers);
+                updateCodeStats(inputCode, inputStats);
+                showNotification(`File loaded: ${file.name}`);
+            };
+            reader.readAsText(file);
+        });
+        
+        saveConfigBtn.addEventListener('click', saveConfig);
+        
+        loadConfigBtn.addEventListener('click', () => {
+            configInput.click();
+        });
+        
+        configInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                loadConfig(event.target.result);
+            };
+            reader.readAsText(file);
+        });
+    </script>
+</body>
+</html>
